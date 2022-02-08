@@ -79,7 +79,7 @@ yarn test:ui tests
 
 ### UI tests - Headless mode
 
-By default, UI tests are running on browsers in headless mode. To have the browser visible while running the tests, use the `headless` suffixed yard scripts. ie
+By default, UI tests are running on browsers in non-headless mode (browser visible). To have the tests running in headless mode (no browser visible), use the `headless` suffixed yarn scripts. ie
 
 ```bash
 yarn test:ui:headless tests

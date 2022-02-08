@@ -11,10 +11,10 @@
     "lint:fix": "eslint . --fix && yarn lint",
     "lint:pretty": "yarn lint && yarn prettier:check",
     "lint:fix:pretty": "yarn lint:fix && yarn prettier:write",
-    "test:ui": "mocha --require services/hooks/mocha.js",
+    "test:ui": "HEADLESS=false mocha --require services/hooks/mocha.js",
     "test:ui:parallel": "yarn test:ui --parallel",
-    "test:ui:headless": "HEADLESS=false yarn test:ui",
-    "test:ui:headless:parallel": "HEADLESS=false yarn test:ui:parallel",
+    "test:ui:headless": "mocha --require services/hooks/mocha.js",
+    "test:ui:headless:parallel": "yarn test:ui:headless --parallel",
     "test:ui:watch": "yarn test:ui --watch"
   },
   "devDependencies": {
