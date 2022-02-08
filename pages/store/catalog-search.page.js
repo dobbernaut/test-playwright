@@ -17,7 +17,7 @@ export class StoreCatalogSearchPage extends BasePage {
    */
   async getNumberOfSearchItems() {
     await this.page.waitForSelector(this.#numberOfSearchItems);
-    return parseInt(await (await this.page.$(this.#numberOfSearchItems)).innerText());
+    return parseInt(await (await this.page.$(this.#numberOfSearchItems)).innerText(), 10);
   }
 
   /**
@@ -32,10 +32,10 @@ export class StoreCatalogSearchPage extends BasePage {
     const searchItems = [];
     for (const item of await this.page.$$(this.#items)) {
       searchItems.push({
-        productId: parseInt(await (await item.$(this.#product)).getAttribute('data-product-id')),
+        productId: parseInt(await (await item.$(this.#product)).getAttribute('data-product-id'), 10),
         name: (await (await item.$(this.#productName)).innerText()).toLowerCase(),
         url: await (await item.$(this.#productUrl)).getAttribute('href'),
-        points: parseInt(await (await item.$(this.#productPrice)).innerText()),
+        points: parseInt((await (await item.$(this.#productPrice)).innerText()).replace(/,/g, ''), 10),
       });
     }
     return searchItems;
