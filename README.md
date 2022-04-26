@@ -1,5 +1,30 @@
 # Test with Mocha and Playwright
 
+- [Test with Mocha and Playwright](#test-with-mocha-and-playwright)
+  - [Installation](#installation)
+    - [Adding node packages](#adding-node-packages)
+  - [Prerequisites](#prerequisites)
+    - [nvm](#nvm)
+      - [For Linux](#for-linux)
+      - [For Mac](#for-mac)
+      - [For Windows](#for-windows)
+  - [Setup](#setup)
+  - [Test](#test)
+    - [UI tests - Headless mode](#ui-tests---headless-mode)
+    - [Run specific tests by file or directory](#run-specific-tests-by-file-or-directory)
+    - [Run tests in parallel](#run-tests-in-parallel)
+    - [Watch a test file](#watch-a-test-file)
+    - [Test report](#test-report)
+  - [Lint and Format](#lint-and-format)
+  - [Structure](#structure)
+    - [Artifacts](#artifacts)
+    - [Config](#config)
+    - [Constants](#constants)
+    - [Scripts](#scripts)
+    - [Services](#services)
+    - [Pages](#pages)
+    - [Tests](#tests)
+
 This project runs on [node](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/getting-started) for package management.
 
 It uses [Mocha](https://mochajs.org/) for the test framework and [Chai](https://mochajs.org/) to perform test assertions, [playwright](https://playwright.dev/docs/intro) for ui testing and [axios](https://axios-http.com/) as an http client for making http or service requests to test.
@@ -26,6 +51,30 @@ To [add](https://classic.yarnpkg.com/en/docs/cli/add), use `yarn add -D { packag
 ## Prerequisites
 
 ### [nvm](https://github.com/nvm-sh/nvm)
+
+#### For Linux
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# check nvm installed
+command -v nvm
+
+# install node
+nvm install node
+
+# or with a specific version
+nvm install node 16.13.0
+
+# it default to the first node installed but to use a different version
+nvm use 16.13.0
+
+# install yarn globally
+npm install -g yarn
+
+# check yarn working properly
+yarn --version
+```
 
 #### For Mac
 
@@ -58,15 +107,12 @@ yarn -v
 npm install -g yarn
 ```
 
-### [yarn](https://yarnpkg.com/getting-started)
+## Setup
 
-Later versions of node (from v16) ships with yarn already installed. If yarn is not already available, do:
+To set up the project, install the npm packages by running
 
 ```bash
-npm install -g yarn
-
-# check yarn is available
-yarn -v
+yarn ci
 ```
 
 ## Test
@@ -184,112 +230,128 @@ Before then, the IDE will highlight issues and errors based on rules that were s
 |-- *config.json
 ```
 
-> **Artifacts**
->
-> - Have all test artifacts save here ie test result reports, error screenshots and logs.
+### Artifacts
 
-> **Config**
->
-> - All test related configurations should live here. Do not confuse with configs for node packages and dependencies like eslint, mocha configs on the main directory.
+- Have all test artifacts save here ie test result reports, error screenshots and logs.
 
-> **Constants**
->
-> - Contains constants to use for test and function arguments.
->   > - **Example** http response status codes.
+### Config
 
-> **Scripts**
->
-> - Any scripts we need to run adjacent to our test suite like hooks or running build pipelines.
-> - Exceptions could be when a build tool requires their scripts on a specific directory eg: github actions requires them to be on a .github directory from the main directory.
+- All test related configurations should live here. Do not confuse with configs for node packages and dependencies like eslint, mocha configs on the main directory.
 
-> **Services**
->
-> - All services under test and utilities for the test suite are here. If you need to get data from a web service or a configuration or secret from a key store, create a service folder for that resource or purpose here.
-> - **Example** if you want to read a json file from aws s3, create an aws utility folder here and have an s3.js file that contains methods for getting files from s3 etc.
->
-> ```
-> |-- services
-> |   |-- aws
-> |       |-- s3.js
-> |   |-- kafka
-> |       |-- kafka.js
-> |   |-- blog-post
-> |       |-- blog-post.js
-> |       |-- blog-post-helper.js
-> |       |-- index.js
-> ```
+### Constants
 
-> **index.js** - Use index to export all files from a directory so there's not much clutter from the import statements when importing a few classes or methods from files spread inside the directory eg:
->
-> ```
-> |-- service
-> |   |-- blog-post
-> |       |-- blog-post.js
-> |       |-- blog-post-helper.js
-> |       |-- index.js
-> ```
->
-> blog-post.js
->
-> ```javascript
-> export const blogPostFunction = () => {
->   console.log('hello from blog post function');
-> };
-> ```
->
-> blog-post-helper.js
->
-> ```javascript
-> export const blogPostFunctionHelper = () => {
->   console.log('hello from blog post function helper');
-> };
-> ```
->
-> index.js
->
-> ```javascript
-> export * from './blog-post';
-> export * from './blog-post-helper';
-> ```
->
-> file.test.js
->
-> ```javascript
-> import { blogPostFunction, blogPostFunctionHelper } from './services/blog-post';
-> ```
+- Contains constants to use for test and function arguments.
+- **Example** http response status codes.
 
-> **Pages**
->
-> - Similar to services, all page objects are here. Have each pages represent the tree map of the application.
-> - Each page contains in itself the element selectors and the page methods ie:
->
-> ```javascript
-> import { BasePage } from '@pages/base.page';
->
-> export class SamplePage extends BasePage {
->   // selectors
->   #numberOfSearchItems = '[itemprop="numberOfItems"]';
->
->   /**
->    * Return the number of search item results.
->    *
->    * @returns {Promise<number>}
->    */
->   async getNumberOfSearchItems() {
->     await this.page.waitForSelector(this.#numberOfSearchItems);
->     return await (await this.page.$(this.#numberOfSearchItems)).innerText();
->   }
-> }
-> ```
+### Scripts
 
-> **Tests**
->
-> - All tests for your application are here. Suffix the test files with .test.js. Try grouping them by logical parts of the application or service.
->
-> ```
-> |-- tests
-> |   |-- blog-posts
-> |       |-- add-update.test.js
-> |       |-- delete.test.js
-> |       |-- get.test.js
-> ```
+- Any scripts we need to run adjacent to our test suite like hooks or running build pipelines.
+- Exceptions could be when a build tool requires their scripts on a specific directory eg: github actions requires them to be on a .github directory from the main directory.
+
+### Services
+
+- All services under test and utilities for the test suite are here. If you need to get data from a web service or a configuration or secret from a key store, create a service folder for that resource or purpose here.
+- **Example** if you want to read a json file from aws s3, create an aws utility folder here and have an s3.js file that contains methods for getting files from s3 etc.
+
+```
+|-- services
+|   |-- aws
+|       |-- s3.js
+|   |-- kafka
+|       |-- kafka.js
+|   |-- blog-post
+|       |-- blog-post.js
+|       |-- blog-post-helper.js
+|       |-- index.js
+```
+
+- **index.js** - Use index to export all files from a directory so there's not much clutter from the import statements when importing a few classes or methods from files spread inside the directory eg:
+
+```
+|-- service
+|   |-- blog-post
+|       |-- blog-post.js
+|       |-- blog-post-helper.js
+|       |-- index.js
+```
+
+```javascript
+// blog-post.js
+
+export const blogPostFunction = () => {
+  console.log('hello from blog post function');
+};
+```
+
+```javascript
+// blog-post-helper.js
+
+export const blogPostFunctionHelper = () => {
+  console.log('hello from blog post function helper');
+};
+```
+
+```javascript
+// index.js
+
+export * from './blog-post';
+export * from './blog-post-helper';
+```
+
+```javascript
+// file.test.js
+
+import { blogPostFunction, blogPostFunctionHelper } from './services/blog-post';
+```
+
+### Pages
+
+- Similar to services, all page objects are here. Have each pages represent the tree map of the application.
+- Each page is composed of two modules, the .page and the .element module files. the .element module is where we have the element selectors and the .page module is where we import the .element module and use to build page object methods.
+
+```
+|-- pages
+|   |-- sample.element.js
+|   |-- sample.page.js
+```
+
+```javascript
+// sample.page.js
+
+import { BasePage } from '@pages/base.page';
+import { SampleElements } from './sample.element';
+export class SamplePage extends BasePage {
+  #sample = new SampleElements();
+  /**
+   * Return the number of search item results.
+   *
+   * @returns {Promise<number>}
+   */
+  async getNumberOfSearchItems() {
+    await this.#sample.numberOfSearchItems.waitForExist();
+    return parseInt(await (await this.#sample.numberOfSearchItems).getText(), 10);
+  }
+}
+```
+
+```javascript
+// sample.element.js
+
+export class SampleElements {
+  get numberOfSearchItems() {
+    return $('[itemprop="numberOfItems"]');
+  }
+}
+```
+
+### Tests
+
+- All tests for your application are here. Suffix the test files with .test.js. Try grouping them by logical parts of the application or service.
+
+```
+|-- tests
+|   |-- blog-posts
+|       |-- add-update.test.js
+|       |-- delete.test.js
+|       |-- get.test.js
+```
