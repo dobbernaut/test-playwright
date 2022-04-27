@@ -120,7 +120,7 @@ yarn ci
 To run all tests:
 
 ```bash
-yarn test:ui tests
+yarn test-ui tests
 ```
 
 ### UI tests - Headless mode
@@ -128,7 +128,7 @@ yarn test:ui tests
 By default, UI tests are running on browsers in non-headless mode (browser visible). To have the tests running in headless mode (no browser visible), use the `headless` suffixed yarn scripts. ie
 
 ```bash
-yarn test:ui:headless tests
+yarn test-ui-headless tests
 ```
 
 ### Run specific tests by file or directory
@@ -148,21 +148,21 @@ If you have a test structure like:
 
 ```bash
 # running test:ui script passing a directory
-yarn test:ui test/scenario1
+yarn test-ui test/scenario1
 # will run file-1a and file-1b tests
 
 # running test:ui script passing a file
-yarn test:ui test/scenario2/file-2a.test.js
+yarn test-ui test/scenario2/file-2a.test.js
 # will run file-2a test
 ```
 
 ### Run tests in parallel
 
-You can run all the tests in parallel by using the :parallel script. Other scripts have a :parallel variant if you need to run specific test files or directory with test:ui by adding :parallel `yarn test:ui:parallel`.
+You can run all the tests in parallel by using the :parallel script. Other scripts have a :parallel variant if you need to run specific test files or directory with test:ui by adding :parallel `yarn test-ui-parallel`.
 
 ```bash
 # adding :parallel to test:file will run all tests under test/scenario1 in parallel
-yarn test:ui:parallel test/scenario1
+yarn test-ui-parallel test/scenario1
 
 ```
 
@@ -171,7 +171,7 @@ yarn test:ui:parallel test/scenario1
 You can have a test or sets of tests to automatically rerun after saving your changes by providing a directory, file or list of both to the watch option.
 
 ```bash
-yarn test:ui:watch test/scenario1/file-1a.test.js
+yarn test-ui-watch test/scenario1/file-1a.test.js
 ```
 
 ### Test report
@@ -185,14 +185,14 @@ Formatting and linting of source files are enforced by [eslint](https://eslint.o
 Most editors can integrate directly with these tools, so that files will be checked and formatted.
 
 > On install of local dependencies `yarn install`, a git pre-commit hook will be added from [githooks](scripts/githooks/pre-commit).
-> This will run steps similar to `yarn lint:pretty` for the files to be committed.
+> This will run steps similar to `yarn lint-pretty` for the files to be committed.
 
 > **WARNING**: You can add **--no-verify** on your git commit to bypass the pre-commit hook... If you don't use it, that will be the end of it. I will not look for you, I will not pursue you... but if you do, I will look for you, I will find you... and I will kill you.
 
 Before then, the IDE will highlight issues and errors based on rules that were set in [.eslintrc.json](.eslintrc.json) to be fixed, see eslint [rules](https://eslint.org/docs/rules/). Here are the npm scripts to lint and check formatting:
 
-- `yarn lint:pretty` - see if there are linting issues and what files are not formatted correctly.
-- `yarn lint:fix:pretty` - try to fix fixable eslint errors and re-format files in place according to the prettier rules.
+- `yarn lint-pretty` - see if there are linting issues and what files are not formatted correctly.
+- `yarn lint-fix-pretty` - try to fix fixable eslint errors and re-format files in place according to the prettier rules.
 
 ## Structure
 
@@ -307,39 +307,27 @@ import { blogPostFunction, blogPostFunctionHelper } from './services/blog-post';
 ### Pages
 
 - Similar to services, all page objects are here. Have each pages represent the tree map of the application.
-- Each page is composed of two modules, the .page and the .element module files. the .element module is where we have the element selectors and the .page module is where we import the .element module and use to build page object methods.
+- Each page is composed of the element selectors and the page actions.
 
 ```
 |-- pages
-|   |-- sample.element.js
 |   |-- sample.page.js
 ```
 
 ```javascript
 // sample.page.js
 
-import { BasePage } from '@pages/base.page';
-import { SampleElements } from './sample.element';
+import { BasePage } from '@page/base.page';
+
 export class SamplePage extends BasePage {
-  #sample = new SampleElements();
+  #sampleButton = 'button[type="sample"]';
   /**
-   * Return the number of search item results.
+   * Do some sampling.
    *
    * @returns {Promise<number>}
    */
-  async getNumberOfSearchItems() {
-    await this.#sample.numberOfSearchItems.waitForExist();
-    return parseInt(await (await this.#sample.numberOfSearchItems).getText(), 10);
-  }
-}
-```
-
-```javascript
-// sample.element.js
-
-export class SampleElements {
-  get numberOfSearchItems() {
-    return $('[itemprop="numberOfItems"]');
+  async sample() {
+    await this.page.click(this.#sampleButton);
   }
 }
 ```

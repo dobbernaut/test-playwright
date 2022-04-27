@@ -1,3 +1,3 @@
-import { BasePage } from '@pages/base.page';
+import { BasePage } from '@page/base.page';
 
 export class StoreDealsPage extends BasePage {}

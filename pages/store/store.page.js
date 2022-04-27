@@ -1,4 +1,4 @@
-import { BasePage } from '@pages/base.page';
+import { BasePage } from '@page/base.page';
 import { StoreAllItemsPage } from './all-items.page';
 import { StoreCatalogSearchPage } from './catalog-search.page';
 import { StoreDealsPage } from './store-deals.page';

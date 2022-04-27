@@ -1,8 +1,8 @@
-import { StatusCode } from '@constants/http-response-codes';
-import { HomePage } from '@pages/home.page';
-import { StorePage } from '@pages/store/store.page';
-import { BrowserPage } from '@services/browser';
-import { BlogPosts } from '@services/sample-api';
+import { StatusCode } from '@constant/http-response-codes';
+import { HomePage } from '@page/home.page';
+import { StorePage } from '@page/store/store.page';
+import { BrowserPage } from '@service/browser';
+import { BlogPosts } from '@service/sample-api';
 import { expect } from 'chai';
 
 describe('Flybuys store search', function () {
