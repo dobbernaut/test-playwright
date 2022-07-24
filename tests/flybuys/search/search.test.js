@@ -2,7 +2,7 @@ import { StatusCode } from '@constant/http-response-codes';
 import { HomePage } from '@page/flybuys/home.page';
 import { StorePage } from '@page/flybuys/store/store.page';
 import { BrowserPage } from '@service/browser';
-import { BlogPosts } from '@service/sample-api';
+import { BlogPosts } from '@service/blog-posts';
 import { expect } from 'chai';
 
 describe('Flybuys store search', function () {
