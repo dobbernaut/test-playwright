@@ -1,16 +1,7 @@
-import { BasePage } from '@page/base.page';
-import { StoreAllItemsPage } from './all-items.page';
+import { BasePage } from '@page/flybuys/base.page';
 import { StoreCatalogSearchPage } from './catalog-search.page';
-import { StoreDealsPage } from './store-deals.page';
-import { StoreTravelBookingsPage } from './travel-bookings.page';
 
 export class StorePage extends BasePage {
-  /** @type StoreAllItemsPage */
-  #allItems;
-  /** @type StoreDealsPage */
-  #storeDeals;
-  /** @type StoreTravelBookingsPage */
-  #travelBookings;
   /** @type StoreCatalogSearchPage */
   #catalogSearch;
 
@@ -28,21 +19,9 @@ export class StorePage extends BasePage {
    */
   constructor(page) {
     super(page);
-    this.#allItems = new StoreAllItemsPage(this.page);
-    this.#storeDeals = new StoreDealsPage(this.page);
-    this.#travelBookings = new StoreTravelBookingsPage(this.page);
     this.#catalogSearch = new StoreCatalogSearchPage(this.page);
   }
 
-  get allItems() {
-    return this.#allItems;
-  }
-  get storeDeals() {
-    return this.#storeDeals;
-  }
-  get travelBookings() {
-    return this.#travelBookings;
-  }
   get catalogSearch() {
     return this.#catalogSearch;
   }

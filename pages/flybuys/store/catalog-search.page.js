@@ -1,4 +1,4 @@
-import { BasePage } from '@page/base.page';
+import { BasePage } from '@page/flybuys/base.page';
 
 export class StoreCatalogSearchPage extends BasePage {
   // selectors
